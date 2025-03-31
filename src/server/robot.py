@@ -1,7 +1,6 @@
 # python 3.11
 #sudo ../rasptank/bin/python3 -m src.server.robot
 import random
-import os
 from paho.mqtt import client as mqtt_client
 from src.server import move, infra, detectLine
 from src.server.LED import LED
@@ -10,7 +9,7 @@ import RPi.GPIO as GPIO
 from src.rasptank import InfraLib
 import uuid
 from threading import Thread
-import time
+import queue
 
 broker = 'broker.emqx.io' #''192.168.0.125
 tankID = hex(uuid.getnode())
@@ -23,12 +22,11 @@ topics = ["python/ctrlrobot",
           f"tanks/{tankID}/flag",
           f"tanks/{tankID}/qr_code"
           ]
-# Generate a Client ID with the subscribe prefix.
+
 client_id = f'subscribe-{random.randint(0, 100)}'
-# username = 'emqx'
-# password = 'public'
 
 led = LED()
+qr_code = queue.Queue()
 
 def connect_mqtt() -> mqtt_client:
     def on_connect(client, userdata, flags, rc):
@@ -60,7 +58,9 @@ def set_motor():
     GPIO.setmode(GPIO.BOARD)
     move.motorStop()
 
-
+def qr_code(client):
+    qr_code = scan_code()
+    client.publish(f"tanks/{tankID}/qr_code", f"QR_CODE {qr_code}")
 
 def subscribe(client: mqtt_client):
     def on_message(client, userdata, msg):
@@ -143,8 +143,10 @@ def run():
     t1 = Thread(target=set_receive_infra, args=(client,))
     #TODO fix multithreading
     t2 = Thread(target=detectLine.detect_zone_capture, args=(client,))
+    t3 = Thread(target=qr_code, args=(client,))
     t1.start()
     t2.start()
+    t3.start()
     #set_motor()
     client.loop_forever()
 
