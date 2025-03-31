@@ -64,7 +64,7 @@ def processData(client, userdata, message):
     else:
         participant_id = message.topic[6:20]
         if participant_id in participants.keys():
-            if message.topic[22:] == "flag":
+            if message.topic[21:] == "flag":
                 if querry[0] == "ENTER_FLAG_AREA":
                     if not any(participants[p]["flag"] for p in participants.keys()):
                         client.publish(message.topic, "START_CATCHING")
@@ -149,6 +149,7 @@ if __name__ == "__main__":
 
     client = mqtt.Client()
     client.connect("broker.emqx.io")#192.168.0.100
+
 
     client.subscribe("init")
     client.subscribe("tanks/+/flag")
