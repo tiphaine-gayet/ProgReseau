@@ -108,7 +108,7 @@ def processData(client, userdata, message):
                                 client.publish("tanks/"+shooter+"/shots/out", "FRIENDLY_FIRE")
                                 print("Carefull " + shooter + ", friendly fire")
 
-            elif message.topic[22:] == "qr_code":
+            elif message.topic[21:] == "qr_code":
                 if querry[0] == "QR_CODE":
                     qr = querry[1]
                     if qr == qr_codes.get(participants[participant_id]["color"]):
