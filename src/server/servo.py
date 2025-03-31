@@ -17,14 +17,14 @@ def move_servo(channel, position):
     """Move servo to a specific position."""
     pwm.set_pwm(channel, 0, ctrl_range(position, pwm0_max, pwm0_min))
 
-def turn_camera_right_left():
-    """Turn the camera right and then left."""
+def turn_right():
     global pwm0_pos
-    move_servo(0, pwm0_max)  # Turn right
+    pwm0_pos = ctrl_range(pwm0_pos + 50, pwm0_max, pwm0_min)
+    move_servo(0, pwm0_pos)
     time.sleep(1)
-    move_servo(0, pwm0_min)  # Turn left
-    time.sleep(1)
-    move_servo(0, pwm0_init)  # Return to center
 
-if __name__ == "__main__":
-    turn_camera_right_left()
+def turn_left():
+    global pwm0_pos
+    pwm0_pos = ctrl_range(pwm0_pos - 50, pwm0_max, pwm0_min)
+    move_servo(0, pwm0_pos)
+    time.sleep(1)

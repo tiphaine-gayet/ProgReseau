@@ -3,7 +3,7 @@
 import random
 import os
 from paho.mqtt import client as mqtt_client
-from src.server import move, infra, detectLine
+from src.server import move, infra, detectLine, servo
 from src.server.LED import LED
 import RPi.GPIO as GPIO
 from src.rasptank import InfraLib
@@ -88,6 +88,10 @@ def subscribe(client: mqtt_client):
                 status = result[0]
                 if status == 0:
                     print(f"Send INIT {tankID} to topic init")
+            if "turn_r" in message:
+                servo.turn_right()
+            if "turn_l" in message:
+                servo.turn_left()    
         if msg.topic == f"tanks/{tankID}/init":
             if "TEAM BLUE" in message:
                 led.blink(r=0, g=0, b=255, time_sec=1)

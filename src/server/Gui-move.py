@@ -69,7 +69,10 @@ def key_press(event):
         "q": "left",
         "d": "right",
         "s": "back",
-        "t": "tir"
+        "t": "tir",
+        "i" : "INIT",
+        "a" : "turn_l",
+        "e" : "turn_r"
     }
     if event.keysym in key_map:
         sent(key_map[event.keysym])
