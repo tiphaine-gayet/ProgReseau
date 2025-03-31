@@ -33,4 +33,4 @@ def turn_camera_left():
 
 if __name__ == "__main__":
     move_servo(0, pwm0_init)  # Ensure the servo starts at the initial position
-    pwm.set_pwm(pwm, 0, 150)
+    pwm.set_pwm(1, 0, 150)
