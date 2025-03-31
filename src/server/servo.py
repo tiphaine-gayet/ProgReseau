@@ -15,16 +15,25 @@ def ctrl_range(value, max_val, min_val):
 
 def move_servo(channel, position):
     """Move servo to a specific position."""
-    pwm.set_pwm(channel, 0, ctrl_range(position, pwm0_max, pwm0_min))
+    pwm.set_pwm(channel, 0, position)
 
-def turn_right():
+def turn_camera_right():
+    """Turn the camera 50 units to the right."""
     global pwm0_pos
     pwm0_pos = ctrl_range(pwm0_pos + 50, pwm0_max, pwm0_min)
     move_servo(0, pwm0_pos)
     time.sleep(1)
 
-def turn_left():
+def turn_camera_left():
+    """Turn the camera 50 units to the left."""
     global pwm0_pos
     pwm0_pos = ctrl_range(pwm0_pos - 50, pwm0_max, pwm0_min)
     move_servo(0, pwm0_pos)
     time.sleep(1)
+
+if __name__ == "__main__":
+    move_servo(0, pwm0_init)  # Ensure the servo starts at the initial position
+    time.sleep(1)
+    turn_camera_right()
+    time.sleep(1)
+    turn_camera_left()
