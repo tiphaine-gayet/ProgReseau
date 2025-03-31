@@ -8,7 +8,6 @@ import time
 import RPi.GPIO as GPIO
 import sys
 import Adafruit_PCA9685
-import ultra
 
 '''
 change this form 1 to 0 to reverse servos
@@ -43,40 +42,6 @@ pwm3_min  = 300
 pwm3_pos  = pwm3_init
 
 org_pos = 300
-
-
-def radar_scan():
-	global pwm0_pos
-	scan_result = 'U: '
-	scan_speed = 1
-	if pwm0_direction:
-		pwm0_pos = pwm0_max
-		pwm.set_pwm(0, 0, pwm0_pos)
-		time.sleep(0.5)
-		scan_result += str(ultra.checkdist())
-		scan_result += ' '
-		while pwm0_pos>pwm0_min:
-			pwm0_pos-=scan_speed
-			pwm.set_pwm(0, 0, pwm0_pos)
-			scan_result += str(ultra.checkdist())
-			scan_result += ' '
-		pwm.set_pwm(0, 0, pwm0_init)
-	else:
-		pwm0_pos = pwm0_min
-		pwm.set_pwm(0, 0, pwm0_pos)
-		time.sleep(0.5)
-		scan_result += str(ultra.checkdist())
-		scan_result += ' '
-		while pwm0_pos<pwm0_max:
-			pwm0_pos+=scan_speed
-			pwm.set_pwm(0, 0, pwm0_pos)
-			scan_result += str(ultra.checkdist())
-			scan_result += ' '
-		pwm.set_pwm(0, 0, pwm0_init)
-	return scan_result
-
-
-
 
 
 def ctrl_range(raw, max_genout, min_genout):
